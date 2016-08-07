@@ -1,0 +1,22 @@
+{
+  "name": "starter",
+  "description": "starter for a project using sass and bootstrap",
+  "main": "index.js",
+  "authors": [
+    "Daniel Stephany"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "bootstrap-sass": "^3.3.7",
+    "jquery": "^3.1.0",
+    "jquery-touch-events": "jQuery-Touch-Events#^1.0.5"
+  }
+}
