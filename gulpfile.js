@@ -7,30 +7,46 @@ var rename = require('gulp-rename'); //used to rename files
 var sass = require('gulp-sass');	//used to compile sass
 var maps = require('gulp-sourcemaps'); //used to make sourcemaps files for js, css, scss,less
 var minifyHTML = require('gulp-htmlmin'); //used to minify html
+var panini = require('panini'); //used for to compile the panini templating
 var cssnano = require('gulp-cssnano'); // used to minify css
 var del = require('del'); // used to delete files for clean up
 var autoprefixer = require('gulp-autoprefixer'); //used to auto add vendor prefixes to css
 var browserSync = require('browser-sync'); //reloads browser after saving a change to a file
+var twig = require('gulp-twig'); //templates html
+var prettify = require('gulp-prettify');
 
 // js files to be concatinated in this order
 var scripts = [
 		'bower_vendors/jquery/dist/jquery.min.js',
 		'bower_vendors/jquery-touch-events/src/jquery.mobile-events.min.js',
 		'bower_vendors/bootstrap-sass/assets/javascripts/bootstrap.js',
-		'js/assets/main.js'];
+		'./src/assets/js/main.js'];
+// file paths to the fonts
+var fonts = ['bower_components/bootstrap-sass/assets/fonts/**/*.*', 'bower_components/font-awesome/fonts/*.*'];
+
+
+// Compile Twig templates to HTML
+gulp.task('template', function() {
+	return gulp.src('src/templates/*.html') // run the Twig template parser on all .html files in the "src" directory
+		.pipe(twig())
+		.pipe(prettify())
+		.pipe(gulp.dest('./dist')); // output the rendered HTML files to the "dist" directory
+});
 
 // reloads browser after saving change to html 
 gulp.task("htmlReload", function(){
-	gulp.src('./*.html', { base: './'})
+	gulp.src('./src/*.html', { base: './'})
 	.pipe(browserSync.stream());
 });
 
+
 // minifies html and saves it to the dist folder
 gulp.task("minifyHTML", function(){
-	return gulp.src('./*.html', { base: './'})
+	return gulp.src('./src/*.html', { base: './src/'})
 	.pipe(minifyHTML({collapseWhitespace: true}))
 	.pipe(gulp.dest("./dist"));
 });
+
 
 // concatinates js from the scripts var into one file app.js, 
 // and places the file in dist/js
@@ -39,8 +55,9 @@ gulp.task('concatScripts', function() {
 	.pipe(maps.init())
 	.pipe(concat('app.js'))
 	.pipe(maps.write('./'))
-	.pipe(gulp.dest('dist/js'));
+	.pipe(gulp.dest('./dist/assets/js'));
 });
+
 
 // concatinates js from the scripts var into one file app.js,
 // minifys app.js into app.min.js,
@@ -54,7 +71,7 @@ gulp.task('minifyScripts', function() {
 	.pipe(uglify())
 	.pipe(rename("app.min.js"))
 	.pipe(maps.write('./'))
-	.pipe(gulp.dest('./js'))
+	.pipe(gulp.dest('./dist/assets/js'))
 	.pipe(browserSync.stream());
 });
 
@@ -63,12 +80,12 @@ gulp.task('minifyScripts', function() {
 // writes source maps
 // places both in dist/css
 gulp.task('compileSass', function() {
-	return gulp.src('scss/main.scss')
+	return gulp.src('src/assets/scss/main.scss')
 		.pipe(maps.init())
 		.pipe(sass())
 		.pipe(autoprefixer({browsers:['last 2 versions']}))
 		.pipe(maps.write('./'))
-		.pipe(gulp.dest('dist/css'));
+		.pipe(gulp.dest('dist/assets/css'));
 });
 
 // compiles sass from scss/main.scss to main.css
@@ -77,15 +94,21 @@ gulp.task('compileSass', function() {
 // writes source maps
 // places both in dist/css
 gulp.task('minifyCss', function() {
-	return gulp.src('scss/main.scss')
+	return gulp.src('src/assets/scss/main.scss')
 		.pipe(maps.init())
 		.pipe(sass())
 		.pipe(autoprefixer({browsers:['last 2 versions']}))
 		.pipe(cssnano())
 		.pipe(rename("main.min.css"))
 		.pipe(maps.write('./'))
-		.pipe(gulp.dest('./css'))
+		.pipe(gulp.dest('./dist/assets/css'))
 		.pipe(browserSync.stream());
+});
+
+//gets the fonts from bower components and places them in dist/assets/fonts
+gulp.task('getFonts', function () {
+	return gulp.src(fonts)
+		.pipe(gulp.dest('./dist/assets/fonts'));
 });
 
 // starts development server at localhost:3000
@@ -94,28 +117,23 @@ gulp.task('watchFiles',['build'], function() {
 	browserSync.init({
         server: "./"
     });
-	gulp.watch('scss/**/*.scss', ['minifyCss']);
-	gulp.watch('js/assets/**/*.js', ['minifyScripts']);
+	gulp.watch('./src/scss/**/*.scss', ['minifyCss']);
+	gulp.watch('./.src/assets/js/**/*.js', ['minifyScripts']);
 	gulp.watch('./*.html', ['htmlReload']);
 });
 
 // builds the dist directory and by running associated tasks
 // that place their contents in dist, and by placing the folders and 
 // files returned from gulp.src into dist 
-gulp.task('build', ['minifyHTML', 'minifyScripts', 'minifyCss','compileSass','concatScripts'], function() {
-	return gulp.src(["img/**",
-					'./*.html',
-					'./js/*.min.js',
-					'./js/*.min.js.map',
-					'./css/*.min.css',
-					'./css/*.min.css.map'],
-					 { base: './'})
+gulp.task('build', ['template', 'getFonts', 'minifyHTML', 'minifyScripts', 'minifyCss','compileSass','concatScripts'], function() {
+	return gulp.src(["src/assets/img/**"],
+					 { base: './src'})
 			.pipe(gulp.dest('dist'));
 });
 
 // deletes all folders created by gulp tasks
 gulp.task('clean', function(){
-	del(['dist','js/app*.js*','css/main*.css*']);
+	del(['dist']);
 });
 
 // default task is set to start the watch listeners
