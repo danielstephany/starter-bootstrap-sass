@@ -7,7 +7,6 @@ var rename = require('gulp-rename'); //used to rename files
 var sass = require('gulp-sass');	//used to compile sass
 var maps = require('gulp-sourcemaps'); //used to make sourcemaps files for js, css, scss,less
 var minifyHTML = require('gulp-htmlmin'); //used to minify html
-var panini = require('panini'); //used for to compile the panini templating
 var cssnano = require('gulp-cssnano'); // used to minify css
 var del = require('del'); // used to delete files for clean up
 var autoprefixer = require('gulp-autoprefixer'); //used to auto add vendor prefixes to css
