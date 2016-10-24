@@ -1,9 +1,15 @@
 {% extends "./layouts/default.html" %}
 
+
 {% block content %}
 
-<h1>Bootstrap Sass starter structure</h1>
-<p>With Bootstrap.js, jQuery, and jQuery Touch Events</p>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-8 col-sm-offset-2">
+            {% include "./partials/sample.html" %}
+        </div>
+    </div>
+</div>
 
 {% endblock %}
 
