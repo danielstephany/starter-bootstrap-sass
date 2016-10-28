@@ -106,7 +106,7 @@ gulp.task('watchFiles',['build'], function() {
         server: "./dist"
     });
 	gulp.watch('./src/assets/scss/**/*.scss', ['minifyCss']);
-	gulp.watch('./.src/assets/js/**/*.js', ['minifyScripts']);
+	gulp.watch('./src/assets/js/**/*.js', ['minifyScripts']);
 	gulp.watch('./src/templates/**/*.html', ['template']);
 });
 
