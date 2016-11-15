@@ -1,18 +1,18 @@
 'use strict'
 
-var gulp =    require('gulp');
-var concat =  require('gulp-concat'); //used for concatinating js files
-var uglify =  require('gulp-uglify'); //used to minify js files
-var rename =  require('gulp-rename'); //used to rename files
-var sass =    require('gulp-sass');	//used to compile sass
-var maps =    require('gulp-sourcemaps'); //used to make sourcemaps files for js, css, scss,less
-var cssnano = require('gulp-cssnano'); // used to minify css
-var del =     require('del'); // used to delete files for clean up
-var autoprefixer = require('gulp-autoprefixer'); //used to auto add vendor prefixes to css
-var browserSync =  require('browser-sync'); //reloads browser after saving a change to a file
-var twig =         require('gulp-twig'); //templates html
-var prettify =     require('gulp-prettify'); //properly indents html files
-var plumber = 	   require('gulp-plumber'); //error handler for gulp
+const gulp =    require('gulp');
+const concat =  require('gulp-concat'); //used for concatinating js files
+const uglify =  require('gulp-uglify'); //used to minify js files
+const rename =  require('gulp-rename'); //used to rename files
+const sass =    require('gulp-sass');	//used to compile sass
+const maps =    require('gulp-sourcemaps'); //used to make sourcemaps files for js, css, scss,less
+const cssnano = require('gulp-cssnano'); // used to minify css
+const del =     require('del'); // used to delete files for clean up
+const autoprefixer = require('gulp-autoprefixer'); //used to auto add vendor prefixes to css
+const browserSync =  require('browser-sync'); //reloads browser after saving a change to a file
+const twig =         require('gulp-twig'); //templates html
+const prettify =     require('gulp-prettify'); //properly indents html files
+const plumber = 	   require('gulp-plumber'); //error handler for gulp
 
 // js files to be concatinated in this order
 var scripts = [
