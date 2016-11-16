@@ -15,11 +15,16 @@ const prettify =     require('gulp-prettify'); //properly indents html files
 const plumber = 	   require('gulp-plumber'); //error handler for gulp
 
 // js files to be concatinated in this order
-var scripts = [
+var vendorScripts = [
 		'bower_vendors/jquery/dist/jquery.min.js',
 		'bower_vendors/jquery-touch-events/src/jquery.mobile-events.min.js',
-		'bower_vendors/bootstrap-sass/assets/javascripts/bootstrap.js',
-		'./src/assets/js/main.js'];
+		'bower_vendors/bootstrap-sass/assets/javascripts/bootstrap.js'
+		];
+var mainScripts = [
+	'./src/assets/js/main/main.js'];
+
+var scriptFeed = vendorScripts.concat(mainScripts);
+
 // file paths to the fonts
 var fonts = ['bower_vendors/bootstrap-sass/assets/fonts/**/*.*', 'bower_vendors/font-awesome/fonts/*.*'];
 
@@ -37,7 +42,7 @@ gulp.task('template', function() {
 // concatinates js from the scripts var into one file app.js,
 // and places the file in dist/js
 gulp.task('concatScripts', function() {
-	return gulp.src(scripts)
+	return gulp.src(scriptFeed)
 	.pipe(maps.init())
 	.pipe(concat('app.js'))
 	.pipe(maps.write('./'))
@@ -51,7 +56,7 @@ gulp.task('concatScripts', function() {
 // places both files in ./js,
 // and reloads the browser
 gulp.task('minifyScripts', function() {
-	return gulp.src(scripts)
+	return gulp.src(scriptFeed)
 	.pipe(plumber())
 	.pipe(maps.init())
 	.pipe(concat('app.js'))
@@ -85,7 +90,7 @@ gulp.task('minifyCss', function() {
 	.pipe(plumber())
 	.pipe(maps.init())
 	.pipe(sass())
-	.pipe(autoprefixer({browsers:['last 2 versions']}))
+	.pipe(autoprefixer({browsers:['last 5 versions', 'IE 9']}))
 	.pipe(cssnano())
 	.pipe(rename("main.min.css"))
 	.pipe(maps.write('./'))
