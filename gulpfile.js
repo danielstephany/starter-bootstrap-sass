@@ -43,8 +43,7 @@ gulp.task('template', function() {
 	.pipe(plumber())
 	.pipe(twig())
 	.pipe(prettify())
-	.pipe(gulp.dest('./dist')) // output the rendered HTML files to the "dist" directory
-	.pipe(browserSync.stream());
+	.pipe(gulp.dest('./dist')); // output the rendered HTML files to the "dist" directory
 });
 
 // concatenates js from the scripts var into one file app.js,
@@ -83,7 +82,7 @@ gulp.task('compileSass', function() {
 	return gulp.src('src/assets/scss/main.scss')
 	.pipe(maps.init())
 	.pipe(sass())
-	.pipe(autoprefixer({browsers:['last 2 versions']}))
+	.pipe(autoprefixer({browsers: supported, add: true}))
 	.pipe(maps.write('./'))
 	.pipe(gulp.dest('dist/assets/css'));
 });
