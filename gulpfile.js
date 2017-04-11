@@ -21,7 +21,7 @@ var vendorScripts = [
 		'bower_vendors/bootstrap-sass/assets/javascripts/bootstrap.js'
 		];
 var mainScripts = [
-	'./src/assets/js/main/main.js'];
+	'./src/assets/js/main/expanding-cards.js'];
 
 var scriptFeed = vendorScripts.concat(mainScripts);
 
