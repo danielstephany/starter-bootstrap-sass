@@ -28,6 +28,14 @@ var scriptFeed = vendorScripts.concat(mainScripts);
 // file paths to the fonts
 var fonts = ['bower_vendors/bootstrap-sass/assets/fonts/**/*.*', 'bower_vendors/font-awesome/fonts/*.*'];
 
+var supported = [
+	'last 5 versions',
+	'safari >= 8',
+	'ie >= 9',
+	'ff >= 20',
+	'ios 6',
+	'android 4'
+];
 
 // Compile Twig templates to HTML
 gulp.task('template', function() {
@@ -35,11 +43,10 @@ gulp.task('template', function() {
 	.pipe(plumber())
 	.pipe(twig())
 	.pipe(prettify())
-	.pipe(gulp.dest('./dist')) // output the rendered HTML files to the "dist" directory
-	.pipe(browserSync.stream());
+	.pipe(gulp.dest('./dist')); // output the rendered HTML files to the "dist" directory
 });
 
-// concatinates js from the scripts var into one file app.js,
+// concatenates js from the scripts var into one file app.js,
 // and places the file in dist/js
 gulp.task('concatScripts', function() {
 	return gulp.src(scriptFeed)
@@ -50,7 +57,7 @@ gulp.task('concatScripts', function() {
 });
 
 
-// concatinates js from the scripts var into one file app.js,
+// concatenates js from the scripts var into one file app.js,
 // minifys app.js into app.min.js,
 // then writes the source maps,
 // places both files in ./js,
@@ -75,7 +82,7 @@ gulp.task('compileSass', function() {
 	return gulp.src('src/assets/scss/main.scss')
 	.pipe(maps.init())
 	.pipe(sass())
-	.pipe(autoprefixer({browsers:['last 2 versions']}))
+	.pipe(autoprefixer({browsers: supported, add: true}))
 	.pipe(maps.write('./'))
 	.pipe(gulp.dest('dist/assets/css'));
 });
@@ -90,8 +97,9 @@ gulp.task('minifyCss', function() {
 	.pipe(plumber())
 	.pipe(maps.init())
 	.pipe(sass())
-	.pipe(autoprefixer({browsers:['last 5 versions', 'IE 9']}))
-	.pipe(cssnano())
+	.pipe(cssnano({
+		autoprefixer: {browsers: supported, add: true}
+	}))
 	.pipe(rename("main.min.css"))
 	.pipe(maps.write('./'))
 	.pipe(gulp.dest('./dist/assets/css'))
